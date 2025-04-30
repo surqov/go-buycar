@@ -57,7 +57,7 @@ type Car struct {
 	Generation         int
 	Trim               string
 	DriveType          LocalizedString
-	WheelSize          Wheels // убери models::, если внутри одного пакета
+	WheelSize          Wheels 
 	OwnersCount        int
 	MileageKm          int
 	BodyType           BodyType
