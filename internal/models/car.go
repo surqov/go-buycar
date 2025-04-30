@@ -1,50 +1,79 @@
 package models
 
-type Car struct {
-  ID               uint64 `json:"id"`
-  Status            bool `json:"status"`   
-  State             LocalizedString
-  VendorID         int
-  ModelName         string
-  Year             int            `json:"year"`
-  Generation       string         `json:"generation"`     
-  OwnersCount      int            `json:"owners_count"`
-  MileageKm        int            `json:"mileage_km"`      
-  BodyType         BodyType       `json:"body_type"`       
-  Color            Color            `json:"color"`           
-  City              string
-  Engine           models::EngineInfo      `json:"engine"`
-  Equipment        LocalizedString `json:"equipment"`       
-  Transmission     LocalizedString `json:"transmission"`    
-  DriveType        LocalizedString `json:"drive_type"`      
-  SteeringWheel    LocalizedString `json:"steering_wheel"`  
-  Condition        LocalizedString `json:"condition"`       
-  PTS              LocalizedString `json:"pts"`             
-  CustomsCleared   bool           `json:"customs_cleared"` 
-  ExchangePossible bool           `json:"exchange_possible"`
-  VIN              string         `json:"vin"`
-  TestDrive        bool
-}
-
-const (
-  New StateType
-  Used StateType
-)
-
-const (
-    Sedan
-    
-    Liftback BodyType = 
-    Sedan    BodyType = "седан"
-    SUV      BodyType = "внедорожник"
-    Hatchback BodyType = "хэтчбек"
-    
-)
+type BodyType int
+type StateType int
+type WheelSide bool
 
 type Dimensions struct {
-  width_cm int
-  length_cm int
-  height_cm int
+	WidthCm     int // ширина
+	LengthCm    int // длина
+	HeightCm    int // высота
+	ClearanceCm int // клиренс
+	WheelbaseCm int // колёсная база
+	TrackWidthCm int // колея
+	MassKg      int  // масса
 }
 
+type DrivingParams struct {
+	MaxSpeedKph      int     // Максимальная скорость
+	AccelerationTo100 float64 // Разгон до 100 км/ч
+	FuelConsumptionCity float64
+	FuelConsumptionHighway float64
+	FuelConsumptionMixed float64
+	FuelType          string
+	EcoClass          string
+	CO2Emissions      int // грамм на км
+}
 
+// Можно будет вынести отдельно
+// type Wheels struct {}
+// EquipmentInfo?
+// type SuspensionAndBrakes struct {}
+
+const (
+	Liftback BodyType = iota
+	Sedan
+	SUV
+	Hatchback
+)
+
+const (
+	New StateType = iota
+	Used
+)
+
+const (
+	Right WheelSide = true
+	Left  WheelSide = false
+)
+
+type Car struct {
+	ID                 uint64
+	Status             bool
+	State              StateType
+	VendorID           int
+	ModelName          string
+	Year               int
+	Generation         int
+	Trim               string
+	DriveType          LocalizedString
+	WheelSize          Wheels // убери models::, если внутри одного пакета
+	OwnersCount        int
+	MileageKm          int
+	BodyType           BodyType
+	Color              Color
+	City               string
+	Engine             EngineInfo
+	Equipment          EquipmentInfo
+	Transmission       LocalizedString
+	SteeringWheel      WheelSide
+	Condition          LocalizedString
+	PTS                LocalizedString
+	CustomsCleared     bool
+	ExchangePossible   bool
+	VIN                string
+	TestDriveAvailable bool
+	Addons             []string
+	Dimensions         Dimensions
+	DrivingParams      DrivingParams
+}
