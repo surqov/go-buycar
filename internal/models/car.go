@@ -37,15 +37,17 @@ type Car struct {
 	Transmission       TransmissionInfo
 	SteeringWheel      SteeringWheelSide
 	Condition          string
-	PTS                string
 	CustomsCleared     bool
 	ExchangePossible   bool
+  PTS                string // Есть такое вообще?
 	VIN                string
 	TestDriveAvailable bool
 	Dimensions         Dimensions
 	DrivingParams      DrivingParams
 	Options            OptionsList
 	Addons             *AddonsList
+  LicensePlateNumber *string
+  EnsuranceValidTill *int
 }
 
 type Dimensions struct {
@@ -93,6 +95,7 @@ type WheelsInfo struct {
 }
 
 // TODO::
+// Заполнить структуру
 type SuspensionAndBrakes struct{}
 
 const (
@@ -122,20 +125,23 @@ const (
 )
 
 const (
-	DriveTypeFWD DriveType = "FWD" // передний привод (Front-Wheel Drive)
-	DriveTypeRWD DriveType = "RWD" // задний привод (Rear-Wheel Drive)
-	DriveTypeAWD DriveType = "AWD" // полный привод (All-Wheel Drive)
-	DriveType4WD DriveType = "4WD" // жёстко подключаемый полный привод (Four-Wheel Drive)
+	FWD DriveType = "FWD" // передний привод (Front-Wheel Drive)
+	RWD DriveType = "RWD" // задний привод (Rear-Wheel Drive)
+	AWD DriveType = "AWD" // полный привод (All-Wheel Drive)
+	4WD DriveType = "4WD" // жёстко подключаемый полный привод (Four-Wheel Drive)
 )
 
 // TODO::
+// Заполнить структуру
 type TransmissionInfo struct{}
 
 // TODO::
+// Исправить название метариалов
 const (
 	Leather    SeatMaterial = "leather"
 	Alcantara  SeatMaterial = "alcantara"
 	Fabric     SeatMaterial = "fabric"
 	EcoLeather SeatMaterial = "eco_leather"
 	Vinyl      SeatMaterial = "vinyl"
+  Combined   SeatMaterial = "combined"
 )
