@@ -1,0 +1,14 @@
+services:
+  app:
+    image: "go-backend"
+    build: .
+    volumes:
+      - data:/data 
+    ports:
+      - "8080:8080""
+
+  postgre-sql:
+    image: "postgresql:latest"
+
+volumes:
+  data: {} 
