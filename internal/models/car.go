@@ -113,6 +113,7 @@ const (
 	New StateType = iota
 	Used
 	NeedRepair
+  ForSpares
 )
 
 const (
