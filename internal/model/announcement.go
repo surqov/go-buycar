@@ -12,7 +12,8 @@ type (
 	StateType         int
 	WheelSide         bool
 	SteeringWheelSide bool
-	DriveType         string AddonsList        []string
+	DriveType         string
+	AddonsList        []string
 	EquipmentList     []string
 	OptionsList       []string
 	SeatMaterial      string

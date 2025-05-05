@@ -16,6 +16,7 @@ func main() {
 
 	database.ConnectDB()
 
-	router.SetupRoutes(app)
+	router.UserManagementRoute(app)
+
 	log.Fatal(app.Listen(":3000"))
 }
