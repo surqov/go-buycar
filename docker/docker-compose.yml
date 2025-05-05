@@ -1,14 +1,28 @@
 services:
   app:
     image: "go-backend"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+    environment:
+      - DEBUG=${DEBUG}
     build: .
     volumes:
       - data:/data 
     ports:
-      - "8080:8080""
+      - "8080:8080"
 
-  postgre-sql:
-    image: "postgresql:latest"
+    db:
+      image: postgres
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+          interval: 10s
+          retries: 5
+          start_period: 30s
+          timeout: 10s
 
 volumes:
   data: {} 

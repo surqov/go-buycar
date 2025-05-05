@@ -1,4 +1,11 @@
-package models
+package model
+
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type (
 	BodyType          string
@@ -10,45 +17,10 @@ type (
 	EquipmentList     []string
 	OptionsList       []string
 	SeatMaterial      string
+	CarCategory       string
+	Color             string
+	InteriorMaterial  string
 )
-
-type Car struct {
-	ID                 uint64
-	Images             []string
-	Status             bool
-	State              StateType
-	VendorID           int
-	ModelName          string
-	Generation         int
-	Year               int
-	OwnersCount        int
-	DriveType          DriveType
-	WheelsSize         WheelsInfo
-	InteriorMaterial   InteriorMaterial
-	MileageKm          int
-	DoorsNumber        int
-	SeatsNumber        int
-	BodyType           BodyType
-	Color              Color
-	City               string
-	EngineType         EngineType
-	Engine             EngineInfo
-	Equipment          EquipmentList
-	Transmission       TransmissionInfo
-	SteeringWheel      SteeringWheelSide
-	Condition          string
-	CustomsCleared     bool
-	ExchangePossible   bool
-  PTS                string // Есть такое вообще?
-	VIN                string
-	TestDriveAvailable bool
-	Dimensions         Dimensions
-	DrivingParams      DrivingParams
-	Options            OptionsList
-	Addons             *AddonsList
-  LicensePlateNumber *string
-  EnsuranceValidTill *int
-}
 
 type Dimensions struct {
 	WidthCm      int // ширина
@@ -90,8 +62,14 @@ type BoltPattern struct {
 
 type WheelsInfo struct {
 	TireSizes   []TireSize
-	WheelSizes  []WheesSize
+	WheelSizes  []WheelSize
 	BoltPattern BoltPattern
+}
+
+type EngineType struct {
+	Electric *ElectricEngine
+	Fuel     *FuelEngine
+	Hybrid   *HybridEngine
 }
 
 // TODO::
@@ -125,10 +103,10 @@ const (
 )
 
 const (
-	FWD DriveType = "FWD" // передний привод (Front-Wheel Drive)
-	RWD DriveType = "RWD" // задний привод (Rear-Wheel Drive)
-	AWD DriveType = "AWD" // полный привод (All-Wheel Drive)
-	4WD DriveType = "4WD" // жёстко подключаемый полный привод (Four-Wheel Drive)
+	D_FWD DriveType = "FWD" // передний привод (Front-Wheel Drive)
+	D_RWD DriveType = "RWD" // задний привод (Rear-Wheel Drive)
+	D_AWD DriveType = "AWD" // полный привод (All-Wheel Drive)
+	D_4WD DriveType = "4WD" // жёстко подключаемый полный привод (Four-Wheel Drive)
 )
 
 // TODO::
@@ -145,3 +123,46 @@ const (
 	Vinyl      SeatMaterial = "vinyl"
   Combined   SeatMaterial = "combined"
 )
+
+type Car struct {
+  gorm.Model
+	ID                 uuid.UUID
+  Status             bool
+  CreatedAt          time.Time 
+  UpdatedAt          time.Time 
+  DeletedAt          time.Time 
+  Category           CarCategory
+	Images             []string
+	State              StateType
+	VendorID           int
+	ModelName          string
+	Generation         int
+	Year               int
+	OwnersCount        int
+	DriveType          DriveType
+	WheelsSize         WheelsInfo
+	InteriorMaterial   InteriorMaterial
+	MileageKm          int
+	DoorsNumber        int
+	SeatsNumber        int
+	BodyType           BodyType
+	Color              Color
+	City               string
+	EngineType         EngineType
+	// Engine             EngineInfo
+	Equipment          EquipmentList
+	Transmission       TransmissionInfo
+	SteeringWheel      SteeringWheelSide
+	Condition          string
+	CustomsCleared     bool
+	ExchangePossible   bool
+  PTS                string // Есть такое вообще?
+	VIN                string
+	TestDriveAvailable bool
+	Dimensions         Dimensions
+	DrivingParams      DrivingParams
+	Options            OptionsList
+	Addons             *AddonsList
+  LicensePlateNumber *string
+  EnsuranceValidTill *time.Time
+}
