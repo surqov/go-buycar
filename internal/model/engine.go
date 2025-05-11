@@ -36,5 +36,3 @@ type HybridEngine struct {
 	HybridType          *string `json:"hybrid_type,omitempty"`          // тип: mild, full, plug-in
 	RegenerativeBraking *bool           `json:"regenerative_braking,omitempty"` // рекуперация
 }
-
-

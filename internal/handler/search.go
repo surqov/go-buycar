@@ -16,10 +16,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func ParseUsername(username string) bool {
-
-}
-
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil

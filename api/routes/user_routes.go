@@ -8,26 +8,38 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-func UsersManagementRoute(app *fiber.App) {
+const (
+	// username: 4 to 20 symbols
+	// only chars, digs and '_'
+	// case insensetive
+	UserNameRegEx = `[a-zA-Z][a-zA-Z0-9_]{3,20}`
+)
+
+func UserRoutes(app *fiber.App) {
 	api := app.Group("/api", logger.New())
-  user := api.Group("/users")
+	users := api.Group("/users")
 
-  // Auth
-  user.Post("/login", handler.Login)
- 
-  // Registration
-  user.Post("/registration", handler.CreateUser)
+	users.Post("/login", handler.Login)
+	users.Post("/registration", handler.CreateUser)
 
-  // Get UserInfo
-  user.Get("/:id<uint64\>", middleware.ProtectedUser(), handler.GetUser)
-  user.Get("/:username<minLen(4)\>", middleware.ProtectedUser(), handler.GetUser)
-
-  // Update UserInfo
-  user.Patch("/:id<uint64\>", middleware.ProtectedUser(), handler.UpdateUser)
-  user.Patch("/:username<minLen(4)\>", middleware.ProtectedUser(), handler.UpdateUser)
-
-  // User Deletion
-  user.Delete("/:id<uint64\>", middleware.ProtectedUser(), handler.DeleteUser)
-  user.Delete("/:username<minLen(4)\>", mid", middleware.ProtectedUser(), handler.DeleteUser)
+	registerUserRoutesByID(users)
+	registerUserRoutesByUsername(users)
 }
 
+func registerUserRoutesByID(r fiber.Router) {
+	group := r.Group("/:id<uint64>", middleware.Protected())
+
+	group.Get("/", handler.GetUser)
+	group.Patch("/", handler.UpdateUser)
+	group.Patch("/password", handler.UpdatePassword)
+	group.Delete("/", handler.DeleteUser)
+}
+
+func registerUserRoutesByUsername(r fiber.Router) {
+	group := r.Group("/:username<" + UserNameRegEx + ">", middleware.Protected())
+
+	group.Get("/", handler.GetUser)
+	group.Patch("/", handler.UpdateUser)
+	group.Patch("/password", handler.UpdatePassword)
+	group.Delete("/", handler.DeleteUser)
+}

@@ -12,7 +12,8 @@ type (
 	StateType         int
 	WheelSide         bool
 	SteeringWheelSide bool
-	DriveType         string AddonsList        []string
+	DriveType         string
+	AddonsList        []string
 	EquipmentList     []string
 	OptionsList       []string
 	SeatMaterial      string
@@ -92,7 +93,7 @@ const (
 const (
 	New StateType = iota
 	Used
-	NeedRepair
+	NeedRepairing
 	ForSpares
 )
 
@@ -123,56 +124,28 @@ const (
 	Combined   SeatMaterial = "combined"
 )
 
-type CarModel struct {
+type Car struct {
 	gorm.Model
-	ID          uuid.UUID
-	Status      bool
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   time.Time
-	Category    CarCategory
-	State       StateType
-	VendorID    int
-	ModelName   string
-	Generation  int
-	DriveType   DriveType
-	WheelsSize  WheelsInfo
-	DoorsNumber int
-	SeatsNumber int
-	BodyType    BodyType
-	EngineType  EngineType
-	// Engine             EngineInfo
+	ID            uuid.UUID
+	Status        bool
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     time.Time
+	Category      CarCategory
+	State         StateType
+	VendorID      int
+	ModelName     string
+	Generation    int
+	DriveType     DriveType
+	WheelsSize    WheelsInfo
+	DoorsNumber   int
+	SeatsNumber   int
+	BodyType      BodyType
+	Engine        EngineType
 	Equipment     EquipmentList
 	Transmission  TransmissionInfo
 	SteeringWheel SteeringWheelSide
 	Dimensions    Dimensions
 	DrivingParams DrivingParams
 	Options       OptionsList
-}
-
-type CarToSell struct {
-	gorm.Model
-	ID                 uuid.uuid
-	SellerID           uint64
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
-	DeletedAt          time.Time
-	Images             []string
-	Year               int
-	MileageKm          int
-	OwnersCount        int
-	EnsuranceValidTill *time.Time
-	InteriorMaterial   InteriorMaterial
-	LicensePlateNumber *string
-	Color              Color
-	CarModel           CarModel
-	ExchangePossible   bool
-	TestDriveAvailable bool
-	VIN                string
-	CustomsCleared     bool
-	PTS                string // Есть такое вообще?
-	Addons             *AddonsList
-	City               int
-	LastService        *time.Time
-	Condition          StateType
 }

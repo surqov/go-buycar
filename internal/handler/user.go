@@ -110,7 +110,35 @@ func UpdateUser(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"status": "success", "message": "User successfully updated", "data": user})
 }
 
-// DeleteUser delete user
+
+func UpdatePassword(c* fiber.Ctx) error {
+	type UpdateUserPassword struct {
+		CurrentPassword string `json:"current_password"`
+		NewPassword string `json:"new_password"`
+	}
+	var updated_user_password_data UpdateUserPassword
+	if err := c.BodyParser(&updated_user_password_data); err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input", "data": err})
+	}
+	id := c.Params("id")
+	token := c.Locals("user").(*jwt.Token)
+
+	if !validToken(token, id) {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
+	}
+
+	db := database.DB
+	var user model.User
+	var err error
+
+	db.First(&user, id)
+	if user.Password, err = hashPassword(updated_user_password_data.Password); err != nil {
+		db.Save(&user)
+	}
+
+	return c.JSON(fiber.Map{"status": "success", "message": "User successfully updated", "data": user})
+}
+
 func DeleteUser(c *fiber.Ctx) error {
 	type PasswordInput struct {
 		Password string `json:"password"`

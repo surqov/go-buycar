@@ -3,45 +3,46 @@ package router
 import (
 	"go-buycar/internal/handler"
 	"go-buycar/internal/middleware"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-func UsersManagementRoute(app *fiber.App) {
+// shortname: from 4 symbols
+// only chars, digs and '_'
+// case insensetive, means 'Gonb' == 'gonb'
+const UserName_RE string = "^[a-z][a-z1-9_]{3,}$"
+
+func CarRoutes(app *fiber.App) {
 	api := app.Group("/api", logger.New())
-  user := api.Group("/users")
+  car := api.Group("/cars")
+  categories := car.Group("/categories")
 
-  // Auth
-  user.Post("/login", handler.Login)
- 
-  // Registration
-  user.Post("/registration", handler.CreateUser)
+  // Get All Cars
+  car.Get("/", middleware.Protected(), handler.GetAllCars)
 
-  // Get UserInfo
-  user.Get("/:id", handler.GetUser)
-  user.Get("/:username", handler.GetUser)
+  // Add NewCar
+  car.Post("/add_new", handler.AddNewCar)
 
-  // Update UserInfo
-  user.Patch("/:id", middleware.Protected(), handler.UpdateUser)
-  user.Patch("/:username", middleware.Protected(), handler.UpdateUser)
+  // Get CarInfo
+  car.Get("/:id<guid\>", middleware.Protected(), handler.GetCar)
+  car.Get("/:car_name<alpha\>", middleware.Protected(), handler.GetCar)
 
-  // User Deletion
-  user.Delete("/:id", middleware.Protected(), handler.DeleteUser)
-  user.Delete("/:username", middleware.Protected(), handler.DeleteUser)
+  // Get Cars by OwnerID
+  car.Get("/:owner_id<uint64\>", middleware.Protected(), handler.GetCarsByOwnerId)
 
-	// // Cookies
-	// app.Get("/", func(c *fiber.Ctx) error {
-	// 	// Create cookie
-	// 	cookie := new(fiber.Cookie)
-	// 	cookie.Name = "john"
-	// 	cookie.Value = "doe"
-	// 	cookie.Expires = time.Now().Add(24 * time.Hour)
-	//
-	// 	// Set cookie
-	// 	c.Cookie(cookie)
-	//
-	//  return c.SendString("Cookie set!")
-	// })
+  // Update CarInfo
+  car.Patch("/:id<guid\>", middleware.Protected(), handler.UpdateCar)
+
+  // Car Deletion
+  car.Delete("/:id<guid\>", middleware.Protected(), handler.DeleteCar)
+
+  // Get Cars from Category
+  categories.Get("/:name", middleware.Protected(), handler.GetCarsByCategory)
+  //
+  // Get Catogory list
+  categories.Get("/", middleware.Protected(), handler.GetCategories)
+
+  // Add New Category
+  categories.Post("/", middleware.Protected(), handler.AddCategory)
 }
