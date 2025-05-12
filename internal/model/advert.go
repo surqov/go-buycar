@@ -11,6 +11,7 @@ type Advert struct {
 	gorm.Model
 	ID                 uuid.UUID
 	CarModel           Car
+	Category 					 Category
 	Status             bool
 	SellerID           uint64
 	CreatedAt          time.Time

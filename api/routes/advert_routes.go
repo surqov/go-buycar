@@ -8,7 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-
 func AdvRoutes(app *fiber.App) {
 	api := app.Group("/api", logger.New())
   adverts := api.Group("/adverts")

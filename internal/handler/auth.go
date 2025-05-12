@@ -16,10 +16,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func ParseUsername(username string) bool {
-
-}
-
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
@@ -35,6 +31,26 @@ func getUserByEmail(e string) (*model.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func getUserByID(id int) (*model.User, error) {
+	db := database.DB
+	var user model.User
+	if err := db.Where(&model.User{ID: id}).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+func getUsernameByID(id int) (string, error) {
+	user, err := getUserByID(id)
+	if err != nil {
+		return "", err
+	}
+	return user.Username, nil
 }
 
 func getUserByUsername(u string) (*model.User, error) {
@@ -54,14 +70,14 @@ func isEmail(email string) bool {
 	return err == nil
 }
 
-// Login get user and password
 func Login(c *fiber.Ctx) error {
 	type LoginInput struct {
 		Identity string `json:"identity"`
 		Password string `json:"password"`
 	}
+
 	type UserData struct {
-		ID       uint   `json:"id"`
+		ID       int    `json:"id"`
 		Username string `json:"username"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
