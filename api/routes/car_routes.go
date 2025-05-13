@@ -12,23 +12,20 @@ func CarRoutes(app *fiber.App) {
 	api := app.Group("/api", logger.New())
   cars := api.Group("/cars")
 
-  // Get All Cars
   cars.Get("/", middleware.Protected(), handler.GetAllCars)
 
-  // Get CarInfo
   cars.Get("/:id<guid>", middleware.Protected(), handler.GetCar)
   cars.Get("/:car_name<alpha>", middleware.Protected(), handler.GetCar)
 	cars.Get("/:owner_id<uint64>", middleware.Protected(), handler.GetCarsByOwnerId)
 
-	// Manage Cars
 	cars.Post("/add_new", handler.AddNewCar)
   cars.Patch("/:id<guid>", middleware.Protected(), handler.UpdateCar)
   cars.Delete("/:id<guid>", middleware.Protected(), handler.DeleteCar)
 
-	registerCategoryRoutes(cars)
+	registerCarCategoriesRoutes(cars)
 }
 
-func registerCategoryRoutes(r fiber.Router) {
+func registerCarCategoriesRoutes(r fiber.Router) {
 	categories := r.Group("/categories")
 
   categories.Get("/:name", middleware.Protected(), handler.GetCarsByCategory)
